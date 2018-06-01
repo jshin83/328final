@@ -1,0 +1,202 @@
+<!--
+    Kianna Dyck
+    Jen Shin
+    edit-flashcards.html
+    Allows user to edit flashcard decks.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required Meta Tags -->
+    <meta charset = "utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Flash Cards</title>
+
+    <!-- CSS Files-->
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+          integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
+          crossorigin="anonymous">
+
+    <!--External CSS-->
+    <link rel="stylesheet" type="text/css" href="views/css/styles.css">
+
+</head>
+
+<body>
+
+<!--nav bar-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light m-3">
+    <a class="navbar-brand" href="./">Flashcards</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <check if ="{{ @_SESSION['userId'] }}">
+                <true>
+                    <a class="nav-item nav-link" href="./">Current Decks</a>
+                    <a class="nav-item nav-link" href="./create">Create New Deck</a>
+                    <a class="nav-item nav-link" href="./logout">Logout</a>
+                </true>
+                <false>
+                    <a class="nav-item nav-link" href="./register">Create an account</a>
+                    <a class="nav-item nav-link" href="./login">Login</a>
+                </false>
+            </check>
+
+        </div> <!-- navbar -->
+    </div> <!-- collapsible content div -->
+</nav> <!-- nav -->
+
+<div class="container">
+    <h2 class="text-center my-4">Edit Deck</h2>
+
+    <!--Deck Name-->
+    <label class="form-control-label">Current Deck name: </label>
+
+    <div class="form-row">
+        <div class="col-8">
+            <input class="form-control" type="text" value="{{ @deckName }}" id="deckName">
+            <input type='hidden' id='deckId' value='{{ $_SESSION["deckId"] }}' >
+
+        </div>
+        <div class="col-4">
+            <button type="button" class="btn btn-outline-secondary" id="updateDeckName">Update Deck Name</button>
+            <button type="button" class="btn btn-outline-danger" id="deleteDeck">Delete Entire Deck</button>
+        </div>
+    </div>
+
+    <!--Flashcards-->
+    <table class="table mt-4">
+        <tr>
+            <th>Question</th>
+            <th>Answer</th>
+            <th>Edit Flashcard</th>
+        </tr>
+
+        <repeat group="{{ @flashcards }}" value="{{ @flashcard }}">
+            <tr id="{{ @flashcard['pairId'] }}">
+                <td>
+                    <textarea class="form-control"  rows="5">{{ @flashcard['question'] }}</textarea>
+                </td>
+
+                <td>
+                    <textarea class="form-control" rows="5">{{ @flashcard['answer'] }}</textarea>
+                </td>
+
+                <td>
+                    <button class="btn btn-outline-warning" id ="saveButton" name ="saveButton">Update</button>
+
+                    <br> <br>
+
+                    <button class="btn btn-outline-danger" id = "remove" name ="remove">Remove</button>
+                </td>
+            </tr>
+        </repeat>
+
+    </table>
+
+    <!-- Add new flashcard -->
+    <button type="button" class="btn btn-primary mb-4" id="addNew">Add new Flashcard</button>
+
+    <div id='TextBoxesGroup' class="form-group">
+        <div id="TextBoxDiv">
+
+            <p id="validationMessage" class="text-danger">Please enter both a question and an answer.</p>
+
+            <label>Question: </label>
+            <textarea class="form-control" id='question' name='question[]' rows="5"></textarea>
+
+            <br>
+
+            <label>Answer: </label>
+            <textarea class="form-control" id='answer' name='answer[]' rows="5"></textarea>
+
+            <br>
+
+        </div>
+    </div>
+
+</div> <!-- container -->
+
+<!--Confirmation Model-->
+<div class="modal fade" id="confirmation">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title" id="confirmHeader">Remove</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body" id="confirmBody">
+
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="confirmYes">Yes</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!--Success/Failure to Update Model-->
+<div class="modal fade" id="successFail">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title" id="successFailHeader">Update</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body" id="successFailBody">
+
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Scripts -->
+<!-- jQuery -->
+<script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous">
+</script>
+
+<!-- popper -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"
+        integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+        crossorigin="anonymous"></script>
+
+<!-- bootstrap -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
+        integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+        crossorigin="anonymous"></script>
+
+<!--External Javascript-->
+<script src="views/js/edit.js"></script>
+
+</body>
+
+</html>

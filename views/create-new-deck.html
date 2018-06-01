@@ -1,0 +1,156 @@
+<!--
+    Kianna Dyck
+    Jen Shin
+    create-new-deck.html
+    Creates a new deck containing question/answer flashcards and a deck name.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required Meta Tags -->
+    <meta charset = "utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Flash Cards</title>
+
+    <!-- CSS Files-->
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+          integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
+          crossorigin="anonymous">
+
+    <!--External CSS-->
+    <link rel="stylesheet" type="text/css" href="views/css/styles.css">
+
+</head>
+
+<body>
+
+<!--nav bar-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light m-3">
+    <a class="navbar-brand" href="./">Flashcards</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <check if ="{{ @_SESSION['userId'] }}">
+                <true>
+                    <a class="nav-item nav-link" href="./">Current Decks</a>
+                    <a class="nav-item nav-link active" href="./create">Create New Deck</a>
+                    <a class="nav-item nav-link" href="./logout">Logout</a>
+                </true>
+                <false>
+                    <a class="nav-item nav-link" href="./register">Create an account</a>
+                    <a class="nav-item nav-link" href="./login">Login</a>
+                </false>
+            </check>
+
+        </div> <!-- navbar -->
+    </div> <!-- collapsible content div -->
+</nav> <!-- nav -->
+
+<div class="container mb-4">
+    <h2>Create New Deck</h2>
+    <form method='post' action='#'>
+
+        Deck Name: <input type ="text" class= "form-control" id = "deckName" name = "deckName"><br/>
+        <!-- Error message for deckName -->
+        <div>
+            <check if="{{!empty (@invalidDeckName) }}">
+                <p class="text-danger">{{ @invalidDeckName }}</p>
+            </check>
+        </div>
+        <hr/>
+
+        <div id='TextBoxesGroup' class="form-group">
+            <div id="TextBoxDiv1">
+                <label>Question #1 : </label>
+                <textarea class="form-control" id='question1' name='question[]' rows="5"></textarea> <br>
+
+                <label>Answer #1 : </label>
+                <textarea class="form-control" id='answer1' name='answer[]' rows="5"></textarea> <br>
+
+            <hr>
+            </div>
+        </div>
+        <input type='button' class= "btn btn-secondary" value='Add a Flashcard' id='addButton'>
+        <input type='button' class= "btn btn-danger" value='Remove a Flashcard' id='removeButton'>
+        <div class="text-right">
+            <input type='submit' class= "btn btn-primary text-right" value='Create Deck' name='submit'>
+        </div>
+    </form>
+
+
+</div> <!-- container -->
+
+<!-- New User Modal -->
+<check if ="{{ @_COOKIE['user'] == 'new' }}">
+    <div class="modal fade" id="newUser">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Welcome to Flashcards!</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <h4>Getting Started</h4>
+                    <p class="lead">First begin by creating your very first deck!</p>
+
+                    <p>
+                        Start by deciding a name to identify your collection
+                    of flashcards. This name will show up in your list of available decks you can view to study from,
+                        accessed by clicking the Current Decks link at the top of the page, so make it something
+                        intuitive! You can make as many decks as you wish, with as many or few questions as you need.
+                    </p>
+
+                    <p>
+                        Each question entered requires an answer to be provided as well. Click on the add button below
+                        the question and answer forms to generate additional fields for adding new question/answer
+                        pairs. When you have finished, click the submit button found at the lower right to save your
+                        entire deck. Your deck will then be accessible to study from, or edit if you decide to add more
+                        flashcards to your deck, remove flashcards, or modify flashcards to better suit your studying
+                        needs.
+                    </p>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</check>
+
+
+<!-- Scripts -->
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+
+<!-- popper -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"
+        integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+        crossorigin="anonymous"></script>
+
+<!-- bootstrap -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
+        integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+        crossorigin="anonymous"></script>
+
+<!--External javascript-->
+<script src = "views/js/create.js"></script>
+
+</body>
+
+</html>
